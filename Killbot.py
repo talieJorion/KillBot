@@ -57,8 +57,8 @@ wm.rpt_mode = cwiid.RPT_BTN | cwiid.RPT_ACC
 # Print state - buttons that are being pushed on remote
 
 while True:
-    print(wm.state['acc'])
-    time.sleep(0.3)
+    # print(wm.state['acc'])
+    # time.sleep(0.3)
         
     if (wm.state['buttons'] & cwiid.BTN_UP):
         robot.forward(200)
@@ -76,4 +76,5 @@ while True:
         robot.right(200)
         print ("button 'RIGHT' pressed")
 
-    else robot.stop()
+    else:
+        robot.stop()
