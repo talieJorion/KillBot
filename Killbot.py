@@ -3,6 +3,8 @@
 # Author: Tony DiCola
 # License: MIT License https://opensource.org/licenses/MIT
 import time
+import subprocess
+import os
 
 # Import the Robot.py file (must be in the same directory as this file!).
 import Robot
@@ -53,6 +55,10 @@ print("Connected")
 # Enable accelerometer
 wm.rpt_mode = cwiid.RPT_BTN | cwiid.RPT_ACC
 
+os.chdir('/home/pi/tensorflow')
+
+# Ask user how to begin
+subprocess.call(['flite', '-t', "I am here to assist you. What would you like to see?"], shell=False)
 
 # Print state - buttons that are being pushed on remote
 
@@ -75,6 +81,14 @@ while True:
     elif (wm.state['buttons'] & cwiid.BTN_RIGHT):
         robot.right(200)
         print ("button 'RIGHT' pressed")
+
+    elif (wm.state['buttons'] & cwiid.BTN_A):
+        print ("button 'A' pressed")
+        subprocess.call(['flite', '-t', "Acquiring image"], shell=False)
+        subprocess.call(['raspistill', '-hf', '-vf', '-o', "image.jpg"], shell=False)
+        subprocess.call(['flite', '-t', "Analyzing"], shell=False)
+        output1 =  subprocess.check_output(['./tensorflow/contrib/pi_examples/label_image/gen/bin/label_image', '--image=image.jpg'], shell=False)
+        subprocess.call(['flite', '-t', "I see a " + output1], shell=False)
 
     else:
         robot.stop()
